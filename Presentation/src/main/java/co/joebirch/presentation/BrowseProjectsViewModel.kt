@@ -19,13 +19,9 @@ open class BrowseProjectsViewModel @Inject internal constructor(
         private val getProjects: GetProjects?,
         private val bookmarkProject: BookmarkProject,
         private val unBookmarkProject: UnbookmarkProject,
-        private val mapper: ProjectViewMapper): ViewModel() {
+        private val mapper: ProjectViewMapper) : ViewModel() {
 
     private val liveData: MutableLiveData<Resource<List<ProjectView>>> = MutableLiveData()
-
-    init {
-        fetchProjects()
-    }
 
     override fun onCleared() {
         getProjects?.dispose()
@@ -51,13 +47,13 @@ open class BrowseProjectsViewModel @Inject internal constructor(
                 UnbookmarkProject.Params.forProject(projectId))
     }
 
-    inner class ProjectsSubscriber: DisposableObserver<List<Project>>() {
+    inner class ProjectsSubscriber : DisposableObserver<List<Project>>() {
         override fun onNext(t: List<Project>) {
             liveData.postValue(Resource(ResourceState.SUCCESS,
                     t.map { mapper.mapToView(it) }, null))
         }
 
-        override fun onComplete() { }
+        override fun onComplete() {}
 
         override fun onError(e: Throwable) {
             liveData.postValue(Resource(ResourceState.ERROR, null, e.localizedMessage))
@@ -65,7 +61,7 @@ open class BrowseProjectsViewModel @Inject internal constructor(
 
     }
 
-    inner class BookmarkProjectsSubscriber: DisposableCompletableObserver() {
+    inner class BookmarkProjectsSubscriber : DisposableCompletableObserver() {
         override fun onComplete() {
             liveData.postValue(Resource(ResourceState.SUCCESS, liveData.value?.data, null))
         }
