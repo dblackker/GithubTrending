@@ -33,10 +33,10 @@ dependencies {
     def mobileUiTestDependencies = rootProject.ext.mobileUiTestDependencies
 
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
-    compile project(':Presentation')
-    compile project(':Data')
-    compile project(':Remote')
-    compile project(':cache')
+    implementation project(':Presentation')
+    implementation project(':Data')
+    implementation project(':Remote')
+    implementation project(':cache')
 
     implementation mobileUiDependencies.javaxAnnotation
 
@@ -55,9 +55,9 @@ dependencies {
     implementation mobileUiDependencies.dagger
     implementation mobileUiDependencies.daggerSupport
 
-    compile presentationDependencies.archRuntime
-    compile presentationDependencies.archExtensions
-    compile "android.arch.persistence.room:rxjava2:1.0.0"
+    implementation presentationDependencies.archRuntime
+    implementation presentationDependencies.archExtensions
+    implementation "android.arch.persistence.room:rxjava2:1.0.0"
     kapt presentationDependencies.archCompiler
 
     testImplementation mobileUiTestDependencies.kotlinJUnit
