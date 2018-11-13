@@ -2,20 +2,22 @@ package co.joebirch.githubtrending.test
 
 import co.joebirch.domain.model.Project
 
-import co.joebirch.domain.model.Project
-
 object ProjectDataFactory {
 
     fun randomUuid(): String {
         return java.util.UUID.randomUUID().toString()
     }
 
-    fun makeProject(): Project {
-        return Project(randomUuid(), randomUuid(), randomUuid(), randomUuid(),
-                randomUuid(), randomUuid(), randomUuid(), false)
+    fun randomBoolean(): Boolean {
+        return Math.random() < 0.5
     }
 
-    fun makeProjectList(count: Int) : List<Project> {
+    fun makeProject(): Project {
+        return Project(randomUuid(), randomUuid(), randomUuid(), randomUuid(),
+                randomUuid(), randomUuid(), randomUuid(), randomBoolean())
+    }
+
+    fun makeProjectList(count: Int): List<Project> {
         val projects = mutableListOf<Project>()
         repeat(count) {
             projects.add(makeProject())

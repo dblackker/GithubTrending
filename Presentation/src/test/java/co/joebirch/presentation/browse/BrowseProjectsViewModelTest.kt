@@ -25,20 +25,28 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.mockito.Captor
+import org.junit.Before
+
 
 @RunWith(JUnit4::class)
 class BrowseProjectsViewModelTest {
 
-    @get:Rule var instantTaskExecutorRule = InstantTaskExecutorRule()
+    @get:Rule
+    var instantTaskExecutorRule = InstantTaskExecutorRule()
     var getProjects = mock<GetProjects>()
     var bookmarkProject = mock<BookmarkProject>()
     var unbookmarkProject = mock<UnbookmarkProject>()
     var projectMapper = mock<ProjectViewMapper>()
-    var projectViewModel = BrowseProjectsViewModel(getProjects,
-            bookmarkProject, unbookmarkProject, projectMapper)
+    lateinit var projectViewModel: BrowseProjectsViewModel;
 
     @Captor
     val captor = argumentCaptor<DisposableObserver<List<Project>>>()
+
+    @Before
+    fun setUp() {
+        projectViewModel = BrowseProjectsViewModel(getProjects,
+                bookmarkProject, unbookmarkProject, projectMapper)
+    }
 
     @Test
     fun fetchProjectsExecutesUseCase() {
