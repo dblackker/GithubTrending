@@ -27,7 +27,7 @@ open class ViewModelFactory : ViewModelProvider.Factory {
             }
         }
         if (creator == null) {
-            throw IllegalStateException("Unknown model class: " + modelClass)
+            throw IllegalStateException("Unknown model class: $modelClass")
         }
         try {
             return creator.get() as T

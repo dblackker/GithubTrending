@@ -1,13 +1,14 @@
 package co.joebirch.mobile_ui.injection.module
 
-import co.joebirch.data.repository.ProjectsRemote
+import co.joebirch.data.ProjectsDataStore
+import co.joebirch.data.Remote
 import co.joebirch.mobile_ui.BuildConfig
 import co.joebirch.remote.ProjectsRemoteImpl
 import co.joebirch.remote.service.GithubTrendingService
 import co.joebirch.remote.service.GithubTrendingServiceFactory
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import javax.inject.Qualifier
 
 @Module
 abstract class RemoteModule {
@@ -19,8 +20,12 @@ abstract class RemoteModule {
         fun provideGithubService(): GithubTrendingService {
             return GithubTrendingServiceFactory.makeGithubTrendingService(BuildConfig.DEBUG)
         }
-    }
 
-    @Binds
-    abstract fun bindProjectsRemote(projectsRemote: ProjectsRemoteImpl): ProjectsRemote
+        @Provides
+        @JvmStatic
+        @Remote
+        fun providesProjectsRemote(projectsRemote: ProjectsRemoteImpl): ProjectsDataStore {
+            return projectsRemote
+        }
+    }
 }

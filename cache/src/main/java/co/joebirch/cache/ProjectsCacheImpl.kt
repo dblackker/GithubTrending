@@ -4,7 +4,7 @@ import co.joebirch.cache.db.ProjectsDatabase
 import co.joebirch.cache.mapper.CachedProjectMapper
 import co.joebirch.cache.model.Config
 import co.joebirch.data.model.ProjectEntity
-import co.joebirch.data.repository.ProjectsCache
+import co.joebirch.data.ProjectsDataStore
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -13,7 +13,7 @@ import javax.inject.Inject
 class ProjectsCacheImpl @Inject constructor(
         private val projectsDatabase: ProjectsDatabase,
         private val mapper: CachedProjectMapper)
-    : ProjectsCache {
+    : ProjectsDataStore {
 
     override fun clearProjects(): Completable {
         return Completable.defer {
@@ -27,7 +27,7 @@ class ProjectsCacheImpl @Inject constructor(
             projectsDatabase.cachedProjectsDao().insertProjects(
                     projects.map { mapper.mapToCached(it) })
             Completable.complete()
-        }
+        }.andThen(setLastCacheTime(System.currentTimeMillis()))
     }
 
     override fun getProjects(): Flowable<List<ProjectEntity>> {

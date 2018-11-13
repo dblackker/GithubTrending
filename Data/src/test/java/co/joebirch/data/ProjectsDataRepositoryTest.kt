@@ -2,9 +2,6 @@ package co.joebirch.data
 
 import co.joebirch.data.mapper.ProjectMapper
 import co.joebirch.data.model.ProjectEntity
-import co.joebirch.data.repository.ProjectsCache
-import co.joebirch.data.repository.ProjectsDataStore
-import co.joebirch.data.store.ProjectsDataStoreFactory
 import co.joebirch.data.test.factory.DataFactory
 import co.joebirch.data.test.factory.ProjectFactory
 import co.joebirch.domain.model.Project
@@ -12,6 +9,7 @@ import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Completable
+import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
 import org.junit.Before
@@ -23,15 +21,12 @@ import org.junit.runners.JUnit4
 class ProjectsDataRepositoryTest {
 
     private val mapper = mock<ProjectMapper>()
-    private val factory = mock<ProjectsDataStoreFactory>()
-    private val store = mock<ProjectsDataStore>()
-    private val cache = mock<ProjectsCache>()
-    private val repository = ProjectsDataRepository(mapper, cache, factory)
+    private val remote = mock<ProjectsDataStore>()
+    private val cache = mock<ProjectsDataStore>()
+    private val repository = ProjectsDataRepository(mapper, cache, remote)
 
     @Before
     fun setup() {
-        stubFactoryGetDataStore()
-        stubFactoryGetCacheDataStore()
         stubIsCacheExpired(Single.just(false))
         stubAreProjectsCached(Single.just(false))
         stubSaveProjects(Completable.complete())
@@ -39,8 +34,7 @@ class ProjectsDataRepositoryTest {
 
     @Test
     fun getProjectsCompletes() {
-        stubGetProjects(Observable.just(listOf(ProjectFactory.makeProjectEntity())))
-        stubMapper(ProjectFactory.makeProject(), any())
+        stubGetProjects(Flowable.just(listOf(ProjectFactory.makeProjectEntity())))
 
         val testObserver = repository.getProjects().test()
         testObserver.assertComplete()
@@ -50,7 +44,7 @@ class ProjectsDataRepositoryTest {
     fun getProjectsReturnsData() {
         val projectEntity = ProjectFactory.makeProjectEntity()
         val project = ProjectFactory.makeProject()
-        stubGetProjects(Observable.just(listOf(projectEntity)))
+        stubGetProjects(Flowable.just(listOf(projectEntity)))
         stubMapper(project, projectEntity)
 
         val testObserver = repository.getProjects().test()
@@ -59,7 +53,7 @@ class ProjectsDataRepositoryTest {
 
     @Test
     fun getBookmarkedProjectsCompletes() {
-        stubGetBookmarkedProjects(Observable.just(listOf(ProjectFactory.makeProjectEntity())))
+        stubGetBookmarkedProjects(Flowable.just(listOf(ProjectFactory.makeProjectEntity())))
         stubMapper(ProjectFactory.makeProject(), any())
 
         val testObserver = repository.getBookmarkedProjects().test()
@@ -70,7 +64,7 @@ class ProjectsDataRepositoryTest {
     fun getBookmarkedProjectsReturnsData() {
         val projectEntity = ProjectFactory.makeProjectEntity()
         val project = ProjectFactory.makeProject()
-        stubGetBookmarkedProjects(Observable.just(listOf(projectEntity)))
+        stubGetBookmarkedProjects(Flowable.just(listOf(projectEntity)))
         stubMapper(project, projectEntity)
 
         val testObserver = repository.getBookmarkedProjects().test()
@@ -118,28 +112,18 @@ class ProjectsDataRepositoryTest {
                 .thenReturn(model)
     }
 
-    private fun stubGetProjects(observable: Observable<List<ProjectEntity>>) {
-        whenever(store.getProjects())
+    private fun stubGetProjects(observable: Flowable<List<ProjectEntity>>) {
+        whenever(remote.getProjects())
                 .thenReturn(observable)
     }
 
-    private fun stubGetBookmarkedProjects(observable: Observable<List<ProjectEntity>>) {
-        whenever(store.getBookmarkedProjects())
+    private fun stubGetBookmarkedProjects(observable: Flowable<List<ProjectEntity>>) {
+        whenever(cache.getBookmarkedProjects())
                 .thenReturn(observable)
-    }
-
-    private fun stubFactoryGetDataStore() {
-        whenever(factory.getDataStore(any(), any()))
-                .thenReturn(store)
-    }
-
-    private fun stubFactoryGetCacheDataStore() {
-        whenever(factory.getCacheDataStore())
-                .thenReturn(store)
     }
 
     private fun stubSaveProjects(completable: Completable) {
-        whenever(store.saveProjects(any()))
+        whenever(cache.saveProjects(any()))
                 .thenReturn(completable)
     }
 
