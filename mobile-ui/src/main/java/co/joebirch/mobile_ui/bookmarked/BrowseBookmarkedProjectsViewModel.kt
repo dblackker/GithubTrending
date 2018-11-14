@@ -1,14 +1,14 @@
-package co.joebirch.presentation
+package co.joebirch.mobile_ui.bookmarked
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import co.joebirch.domain.interactor.bookmark.GetBookmarkedProjects
 import co.joebirch.domain.model.Project
-import co.joebirch.presentation.mapper.ProjectViewMapper
-import co.joebirch.presentation.model.ProjectView
-import co.joebirch.presentation.state.Resource
-import co.joebirch.presentation.state.ResourceState
+import co.joebirch.mobile_ui.mapper.ProjectViewMapper
+import co.joebirch.mobile_ui.model.ProjectView
+import co.joebirch.mobile_ui.state.Resource
+import co.joebirch.mobile_ui.state.ResourceState
 import io.reactivex.observers.DisposableObserver
 import javax.inject.Inject
 
@@ -47,5 +47,4 @@ class BrowseBookmarkedProjectsViewModel @Inject constructor(
         override fun onComplete() { }
 
     }
-
 }

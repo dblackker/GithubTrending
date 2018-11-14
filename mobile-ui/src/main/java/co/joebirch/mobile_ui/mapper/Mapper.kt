@@ -1,4 +1,4 @@
-package co.joebirch.presentation.mapper
+package co.joebirch.mobile_ui.mapper
 
 interface Mapper<out V, in D> {
 

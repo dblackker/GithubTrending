@@ -1,4 +1,4 @@
-package co.joebirch.presentation.model
+package co.joebirch.mobile_ui.model
 
 class ProjectView(val id: String, val name: String, val fullName: String,
                   val starCount: String, val dateCreated: String,

@@ -1,6 +1,6 @@
-package co.joebirch.presentation.mapper
+package co.joebirch.mobile_ui.mapper
 
-import co.joebirch.presentation.test.factory.ProjectFactory
+import co.joebirch.mobile_ui.test.factory.ProjectFactory
 import junit.framework.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith

@@ -2,9 +2,9 @@ package co.joebirch.mobile_ui.injection.module
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
+import co.joebirch.mobile_ui.bookmarked.BrowseBookmarkedProjectsViewModel
+import co.joebirch.mobile_ui.browse.BrowseProjectsViewModel
 import co.joebirch.mobile_ui.injection.ViewModelFactory
-import co.joebirch.presentation.BrowseBookmarkedProjectsViewModel
-import co.joebirch.presentation.BrowseProjectsViewModel
 import dagger.Binds
 import dagger.MapKey
 import dagger.Module

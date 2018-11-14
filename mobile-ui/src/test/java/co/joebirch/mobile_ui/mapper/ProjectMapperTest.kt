@@ -10,7 +10,7 @@ class ProjectMapperTest {
 
     @Test
     fun mapToViewMapsData() {
-        val project = ProjectFactory.makeProjectView()
+        val project = ProjectFactory.makeProject()
         val projectForUi = projectMapper.mapToView(project)
 
         assertEquals(project.id, projectForUi.id)

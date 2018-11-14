@@ -11,12 +11,9 @@ import android.view.View
 import co.joebirch.mobile_ui.R
 import co.joebirch.mobile_ui.bookmarked.BookmarkedActivity
 import co.joebirch.mobile_ui.injection.ViewModelFactory
-import co.joebirch.mobile_ui.mapper.ProjectViewMapper
-import co.joebirch.mobile_ui.model.Project
-import co.joebirch.presentation.BrowseProjectsViewModel
-import co.joebirch.presentation.model.ProjectView
-import co.joebirch.presentation.state.Resource
-import co.joebirch.presentation.state.ResourceState
+import co.joebirch.mobile_ui.model.ProjectView
+import co.joebirch.mobile_ui.state.Resource
+import co.joebirch.mobile_ui.state.ResourceState
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_browse.*
 import javax.inject.Inject
@@ -24,7 +21,6 @@ import javax.inject.Inject
 class BrowseActivity : AppCompatActivity() {
 
     @Inject lateinit var browseAdapter: BrowseAdapter
-    @Inject lateinit var mapper: ProjectViewMapper
     @Inject lateinit var viewModelFactory: ViewModelFactory
     private lateinit var browseViewModel: BrowseProjectsViewModel
 
@@ -74,9 +70,7 @@ class BrowseActivity : AppCompatActivity() {
     private fun handleDataState(resource: Resource<List<ProjectView>>) {
         when (resource.status) {
             ResourceState.SUCCESS -> {
-                setupScreenForSuccess(resource.data?.map {
-                    mapper.mapToView(it)
-                })
+                setupScreenForSuccess(resource.data)
             }
             ResourceState.LOADING -> {
                 progress.visibility = View.VISIBLE
@@ -85,7 +79,7 @@ class BrowseActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupScreenForSuccess(projects: List<Project>?) {
+    private fun setupScreenForSuccess(projects: List<ProjectView>?) {
         progress.visibility = View.GONE
         projects?.let {
             browseAdapter.projects = it

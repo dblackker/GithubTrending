@@ -1,16 +1,13 @@
-package co.joebirch.presentation.browse
+package co.joebirch.mobile_ui.bookmarked
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
-import co.joebirch.domain.interactor.bookmark.BookmarkProject
-import co.joebirch.domain.interactor.bookmark.UnbookmarkProject
-import co.joebirch.domain.interactor.browse.GetProjects
+import co.joebirch.domain.interactor.bookmark.GetBookmarkedProjects
 import co.joebirch.domain.model.Project
-import co.joebirch.presentation.BrowseProjectsViewModel
-import co.joebirch.presentation.mapper.ProjectViewMapper
-import co.joebirch.presentation.model.ProjectView
-import co.joebirch.presentation.state.ResourceState
-import co.joebirch.presentation.test.factory.DataFactory
-import co.joebirch.presentation.test.factory.ProjectFactory
+import co.joebirch.mobile_ui.mapper.ProjectViewMapper
+import co.joebirch.mobile_ui.model.ProjectView
+import co.joebirch.mobile_ui.state.ResourceState
+import co.joebirch.mobile_ui.test.factory.DataFactory
+import co.joebirch.mobile_ui.test.factory.ProjectFactory
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.argumentCaptor
 import com.nhaarman.mockito_kotlin.eq
@@ -25,33 +22,25 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.mockito.Captor
-import org.junit.Before
-
 
 @RunWith(JUnit4::class)
-class BrowseProjectsViewModelTest {
+class BrowseBookmarkedProjectsViewModelTest {
 
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
-    var getProjects = mock<GetProjects>()
-    var bookmarkProject = mock<BookmarkProject>()
-    var unbookmarkProject = mock<UnbookmarkProject>()
-    var projectMapper = mock<ProjectViewMapper>()
-    lateinit var projectViewModel: BrowseProjectsViewModel;
+    var getBookmarkedProjects = mock<GetBookmarkedProjects>()
+    var mapper = mock<ProjectViewMapper>()
+    var projectViewModel = BrowseBookmarkedProjectsViewModel(
+            getBookmarkedProjects, mapper)
 
     @Captor
     val captor = argumentCaptor<DisposableObserver<List<Project>>>()
 
-    @Before
-    fun setUp() {
-        projectViewModel = BrowseProjectsViewModel(getProjects,
-                bookmarkProject, unbookmarkProject, projectMapper)
-    }
-
     @Test
     fun fetchProjectsExecutesUseCase() {
         projectViewModel.fetchProjects()
-        verify(getProjects, times(1)).execute(any(), eq(null))
+
+        verify(getBookmarkedProjects, times(1)).execute(any(), eq(null))
     }
 
     @Test
@@ -63,7 +52,7 @@ class BrowseProjectsViewModelTest {
 
         projectViewModel.fetchProjects()
 
-        verify(getProjects).execute(captor.capture(), eq(null))
+        verify(getBookmarkedProjects).execute(captor.capture(), eq(null))
         captor.firstValue.onNext(projects)
 
         assertEquals(ResourceState.SUCCESS,
@@ -79,7 +68,7 @@ class BrowseProjectsViewModelTest {
 
         projectViewModel.fetchProjects()
 
-        verify(getProjects).execute(captor.capture(), eq(null))
+        verify(getBookmarkedProjects).execute(captor.capture(), eq(null))
         captor.firstValue.onNext(projects)
 
         assertEquals(projectViews,
@@ -90,7 +79,7 @@ class BrowseProjectsViewModelTest {
     fun fetchProjectsReturnsError() {
         projectViewModel.fetchProjects()
 
-        verify(getProjects).execute(captor.capture(), eq(null))
+        verify(getBookmarkedProjects).execute(captor.capture(), eq(null))
         captor.firstValue.onError(RuntimeException())
 
         assertEquals(ResourceState.ERROR,
@@ -99,10 +88,10 @@ class BrowseProjectsViewModelTest {
 
     @Test
     fun fetchProjectsReturnsMessageForError() {
-        val errorMessage = DataFactory.randomString()
+        val errorMessage = DataFactory.randomUuid()
         projectViewModel.fetchProjects()
 
-        verify(getProjects).execute(captor.capture(), eq(null))
+        verify(getBookmarkedProjects).execute(captor.capture(), eq(null))
         captor.firstValue.onError(RuntimeException(errorMessage))
 
         assertEquals(errorMessage,
@@ -111,7 +100,7 @@ class BrowseProjectsViewModelTest {
 
     private fun stubProjectMapperMapToView(projectView: ProjectView,
                                            project: Project) {
-        whenever(projectMapper.mapToView(project))
+        whenever(mapper.mapToView(project))
                 .thenReturn(projectView)
     }
 

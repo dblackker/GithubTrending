@@ -11,10 +11,9 @@ import android.view.View
 import co.joebirch.mobile_ui.R
 import co.joebirch.mobile_ui.injection.ViewModelFactory
 import co.joebirch.mobile_ui.mapper.ProjectViewMapper
-import co.joebirch.presentation.BrowseBookmarkedProjectsViewModel
-import co.joebirch.presentation.model.ProjectView
-import co.joebirch.presentation.state.Resource
-import co.joebirch.presentation.state.ResourceState
+import co.joebirch.mobile_ui.model.ProjectView
+import co.joebirch.mobile_ui.state.Resource
+import co.joebirch.mobile_ui.state.ResourceState
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_bookmarked.*
 import javax.inject.Inject
@@ -65,7 +64,7 @@ class BookmarkedActivity: AppCompatActivity() {
                 progress.visibility = View.GONE
                 recycler_projects.visibility = View.VISIBLE
                 resource.data?.let {
-                    adapter.projects = it.map { mapper.mapToView(it) }
+                    adapter.projects = it
                     adapter.notifyDataSetChanged()
                 }
             }

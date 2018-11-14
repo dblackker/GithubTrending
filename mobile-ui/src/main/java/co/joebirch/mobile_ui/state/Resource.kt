@@ -1,4 +1,4 @@
-package co.joebirch.presentation.state
+package co.joebirch.mobile_ui.state
 
 class Resource<out T> constructor(val status: ResourceState,
                                   val data: T?,

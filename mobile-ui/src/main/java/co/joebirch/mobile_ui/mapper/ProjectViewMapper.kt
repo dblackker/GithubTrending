@@ -1,16 +1,14 @@
 package co.joebirch.mobile_ui.mapper
 
-import co.joebirch.mobile_ui.model.Project
-import co.joebirch.presentation.model.ProjectView
+import co.joebirch.domain.model.Project
+import co.joebirch.mobile_ui.model.ProjectView
 import javax.inject.Inject
 
-class ProjectViewMapper @Inject constructor(): ViewMapper<ProjectView, Project> {
+open class ProjectViewMapper @Inject constructor() : Mapper<ProjectView, Project> {
 
-    override fun mapToView(presentation: ProjectView): Project {
-        return Project(presentation.id, presentation.name,
-                presentation.fullName, presentation.starCount,
-                presentation.dateCreated, presentation.ownerName,
-                presentation.ownerAvatar, presentation.isBookmarked)
+    override fun mapToView(type: Project): ProjectView {
+        return ProjectView(type.id, type.name, type.fullName,
+                type.starCount, type.dateCreated, type.ownerName,
+                type.ownerAvatar, type.isBookmarked)
     }
-
 }

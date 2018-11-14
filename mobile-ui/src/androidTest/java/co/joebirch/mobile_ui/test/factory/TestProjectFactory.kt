@@ -1,6 +1,6 @@
 package co.joebirch.mobile_ui.test.factory
 
-import co.joebirch.presentation.model.ProjectView
+import co.joebirch.mobile_ui.model.ProjectView
 
 object TestProjectFactory {
 

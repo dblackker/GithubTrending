@@ -7,14 +7,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import co.joebirch.mobile_ui.R
-import co.joebirch.mobile_ui.model.Project
+import co.joebirch.mobile_ui.model.ProjectView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import javax.inject.Inject
 
 class BrowseAdapter @Inject constructor(): RecyclerView.Adapter<BrowseAdapter.ViewHolder>() {
 
-    var projects: List<Project> = arrayListOf()
+    var projects: List<ProjectView> = arrayListOf()
     var projectListener: ProjectListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

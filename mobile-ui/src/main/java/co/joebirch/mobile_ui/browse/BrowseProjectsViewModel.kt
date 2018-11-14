@@ -1,4 +1,4 @@
-package co.joebirch.presentation
+package co.joebirch.mobile_ui.browse
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
@@ -7,10 +7,10 @@ import co.joebirch.domain.interactor.bookmark.BookmarkProject
 import co.joebirch.domain.interactor.bookmark.UnbookmarkProject
 import co.joebirch.domain.interactor.browse.GetProjects
 import co.joebirch.domain.model.Project
-import co.joebirch.presentation.mapper.ProjectViewMapper
-import co.joebirch.presentation.model.ProjectView
-import co.joebirch.presentation.state.Resource
-import co.joebirch.presentation.state.ResourceState
+import co.joebirch.mobile_ui.mapper.ProjectViewMapper
+import co.joebirch.mobile_ui.model.ProjectView
+import co.joebirch.mobile_ui.state.Resource
+import co.joebirch.mobile_ui.state.ResourceState
 import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.observers.DisposableObserver
 import javax.inject.Inject
